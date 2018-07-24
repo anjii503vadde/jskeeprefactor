@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+  <title>JS Keep With Bootstrap</title>
+</head>
+
+<body>
+  <header class="page-header text-center text-white" style="background-color: #563d7c;">
+    <h1>KEEP APP USING JAVASCRIPT AND BOOTSTRAP </h1>
+  </header>
+  <hr>
+  <section>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tasklist">
+      Create Tasks
+    </button>
+  </section>
+  <hr>
+  <section>
+    <section id="cardsection">
+      <div class="container">
+        <div id="primary" class="row d-flex justify-content-between align-items-center">
+
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <hr>
+  <section>
+    <div class="modal fade" id="tasklist" tabindex="-1" role="dialog" aria-labelledby="tasklistLabel" aria-hidden="true" data-backdrop="static"
+      data-keyboard="false">
+      <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <h5 class="modal-title" id="taskModalLabel">Create Task List</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="input-group mb-3">
+              <input type="text" name="cardtitle" id="cardtitle" class="form-control" placeholder="Tasks Title" aria-label="Tasks Title"
+                aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <span class="d-none" id="cardtitlemsg"></span>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" name="taskDetail" id="taskDetail" class="form-control form-control-sm" placeholder="Task detatil" aria-label="Task detatil"
+                aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn waves-effect m-0" type="button" id="addtask">Add Task</button>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <span class="d-none" id="taskDetailmsg"></span>
+            </div>
+            <div id="itemsDilog">
+              <ul class="selector list-group pl-0 pt-2" id="dilogULItems"></ul>
+            </div>
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="savechanges">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modalclose">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-secondary text-white text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 py-1">
+          <div class="flex-center">
+            <a class="fb-ic">
+              <i class="fa fa-facebook fa-lg white-text fa-1x mr-1"> </i>
+            </a>
+            <a class="tw-ic">
+              <i class="fa fa-twitter fa-lg white-text fa-1x mr-1"> </i>
+            </a>
+            <a class="gplus-ic">
+              <i class="fa fa-google-plus fa-lg white-text fa-1x mr-1"> </i>
+            </a>
+            <a class="li-ic">
+              <i class="fa fa-linkedin fa-lg white-text fa-1x mr-1"> </i>
+            </a>
+            <a class="ins-ic">
+              <i class="fa fa-instagram fa-lg white-text fa-1x mr-1"> </i>
+            </a>
+            <a class="pin-ic">
+              <i class="fa fa-pinterest fa-lg white-text fa-1x mr-1"> </i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
