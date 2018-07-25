@@ -1,91 +1,93 @@
 import {
-  cardsData, saveData, updateCardData, deleteCardData, deleteCurrentCard,
+  cardsData, saveData, updateCardData, deleteCurrentCard,
 } from './service';
 import {
   createCard, createLiElement, currentTaskList,
 } from './view';
 
-function readElements() {
-  let eachRowData = {};
-  const cardData = {};
-  const allRowData = [];
-  cardData.title = $('#cardtitle').get(0).value;
-  const itemsDilogDiv = $('#itemsDilog')[0];
-  if (itemsDilogDiv.hasChildNodes) {
-    const ulElements = itemsDilogDiv.childNodes;
-    ulElements.forEach((ulElement) => {
-      if (ulElement.hasChildNodes) {
-        const liElements = ulElement.childNodes;
-        liElements.forEach((liElement) => {
-          if (liElement.hasChildNodes) {
-            eachRowData = {};
-            const dataItems = liElement.childNodes;
-            eachRowData.taskStatus = dataItems[0].checked;
-            eachRowData.taskName = dataItems[1].value;
-            allRowData.push(eachRowData);
-          }
-        });
-      }
-    });
-  }
-  cardData.data = allRowData;
-  const d = new Date();
-  const n = d.toLocaleDateString();
-  const time = d.toLocaleTimeString();
-  cardData.lastDate = `Created On ${n} ${time}`;
-  return cardData;
-}
+import store from './state';
 
-function readMainElements() {
-  const primaryDivElements = document.querySelector('#primary');
-  let cardData = {};
-  let myjson = [];
-  const lists = [];
-  const idLists = [];
-  if (primaryDivElements.hasChildNodes) {
-    const cardElements = primaryDivElements.children;
-    Array.prototype.forEach.call(cardElements, (cardElementsElement) => {
-      cardData = {};
-      if (cardElementsElement.hasChildNodes) {
-        const cardBodyElements = cardElementsElement.children;
-        const smallNode = cardBodyElements[1].childNodes;
-        cardData.lastDate = smallNode[0].innerHTML;
-        if (cardBodyElements[0].hasChildNodes) {
-          const childCardBodyElements = cardBodyElements[0].children;
-          cardData.title = childCardBodyElements[0].innerHTML;
+// function readElements() {
+//   let eachRowData = {};
+//   const cardData = {};
+//   const allRowData = [];
+//   cardData.title = $('#cardtitle').get(0).value;
+//   const itemsDilogDiv = $('#itemsDilog')[0];
+//   if (itemsDilogDiv.hasChildNodes) {
+//     const ulElements = itemsDilogDiv.childNodes;
+//     ulElements.forEach((ulElement) => {
+//       if (ulElement.hasChildNodes) {
+//         const liElements = ulElement.childNodes;
+//         liElements.forEach((liElement) => {
+//           if (liElement.hasChildNodes) {
+//             eachRowData = {};
+//             const dataItems = liElement.childNodes;
+//             eachRowData.taskStatus = dataItems[0].checked;
+//             eachRowData.taskName = dataItems[1].value;
+//             allRowData.push(eachRowData);
+//           }
+//         });
+//       }
+//     });
+//   }
+//   cardData.data = allRowData;
+//   const d = new Date();
+//   const n = d.toLocaleDateString();
+//   const time = d.toLocaleTimeString();
+//   cardData.lastDate = `Created On ${n} ${time}`;
+//   return cardData;
+// }
 
-          const ulElement = childCardBodyElements[1].children;
-          idLists.push(childCardBodyElements[3].value);
-          if (ulElement[0].hasChildNodes) {
-            const liElements = ulElement[0].childNodes;
-            liElements.forEach((liElement) => {
-              if (liElement.hasChildNodes) {
-                const jsonData = {};
-                const dataItems = liElement.childNodes;
-                jsonData.taskStatus = dataItems[0].checked;
-                jsonData.taskName = dataItems[1].innerHTML;
-                myjson.push(jsonData);
-              }
-            });
-          }
-          cardData.data = myjson;
-          myjson = [];
-        }
-      }
-      if (!($.isEmptyObject(cardData))) {
-        lists.push(cardData);
-      }
-    });
-  }
-  deleteCardData(idLists).then(() => {
-    lists.forEach((listsElement) => {
-      saveData(listsElement).then(() => {
-      }).catch(() => {
-      });
-    });
-  }).catch(() => {
-  });
-}
+// function readMainElements() {
+//   const primaryDivElements = document.querySelector('#primary');
+//   let cardData = {};
+//   let myjson = [];
+//   const lists = [];
+//   const idLists = [];
+//   if (primaryDivElements.hasChildNodes) {
+//     const cardElements = primaryDivElements.children;
+//     Array.prototype.forEach.call(cardElements, (cardElementsElement) => {
+//       cardData = {};
+//       if (cardElementsElement.hasChildNodes) {
+//         const cardBodyElements = cardElementsElement.children;
+//         const smallNode = cardBodyElements[1].childNodes;
+//         cardData.lastDate = smallNode[0].innerHTML;
+//         if (cardBodyElements[0].hasChildNodes) {
+//           const childCardBodyElements = cardBodyElements[0].children;
+//           cardData.title = childCardBodyElements[0].innerHTML;
+
+//           const ulElement = childCardBodyElements[1].children;
+//           idLists.push(childCardBodyElements[3].value);
+//           if (ulElement[0].hasChildNodes) {
+//             const liElements = ulElement[0].childNodes;
+//             liElements.forEach((liElement) => {
+//               if (liElement.hasChildNodes) {
+//                 const jsonData = {};
+//                 const dataItems = liElement.childNodes;
+//                 jsonData.taskStatus = dataItems[0].checked;
+//                 jsonData.taskName = dataItems[1].innerHTML;
+//                 myjson.push(jsonData);
+//               }
+//             });
+//           }
+//           cardData.data = myjson;
+//           myjson = [];
+//         }
+//       }
+//       if (!($.isEmptyObject(cardData))) {
+//         lists.push(cardData);
+//       }
+//     });
+//   }
+//   deleteCardData(idLists).then(() => {
+//     lists.forEach((listsElement) => {
+//       saveData(listsElement).then(() => {
+//       }).catch(() => {
+//       });
+//     });
+//   }).catch(() => {
+//   });
+// }
 
 function readCardData(current) {
   if (current.parent().parent().parent().get(0).hasChildNodes) {
@@ -123,34 +125,34 @@ function readCardData(current) {
 }
 
 
-function loadAllCards() {
-  cardsData().then((allCardsData) => {
-    allCardsData.forEach((cardsDataElement) => {
-      const dynamicCardElement = createCard(cardsDataElement);
-      const mainPrimaryDiv = document.querySelector('#primary');
-      mainPrimaryDiv.appendChild(dynamicCardElement);
-      $('.selectormain').sortable({
-        items: '> li',
-        update() {
-          readCardData($(this));
-        },
-      }).disableSelection();
-      $('.selectormain').sortable('option', 'items');
-      $('.selectormain').sortable('option', 'items', '> li');
-      $('#primary').sortable({
-        items: '> div',
-        stop() {
-        },
-        update() {
-          readMainElements();
-        },
+// function loadAllCards() {
+//   cardsData().then((allCardsData) => {
+//     allCardsData.forEach((cardsDataElement) => {
+//       const dynamicCardElement = createCard(cardsDataElement);
+//       const mainPrimaryDiv = document.querySelector('#primary');
+//       mainPrimaryDiv.appendChild(dynamicCardElement);
+//       $('.selectormain').sortable({
+//         items: '> li',
+//         update() {
+//           readCardData($(this));
+//         },
+//       }).disableSelection();
+//       $('.selectormain').sortable('option', 'items');
+//       $('.selectormain').sortable('option', 'items', '> li');
+//       $('#primary').sortable({
+//         items: '> div',
+//         stop() {
+//         },
+//         update() {
+//           readMainElements();
+//         },
 
-      }).disableSelection();
-      $('#primary').sortable('option', 'items');
-      $('#primary').sortable('option', 'items', '> div');
-    });
-  }).catch(() => { });
-}
+//       }).disableSelection();
+//       $('#primary').sortable('option', 'items');
+//       $('#primary').sortable('option', 'items', '> div');
+//     });
+//   }).catch(() => { });
+// }
 
 function addItemsToCard() {
   const currentCardTitle = $('#cardtitle')[0].value;
@@ -166,24 +168,28 @@ function addItemsToCard() {
     $('#taskDetailmsg')[0].innerHTML = 'Please enter at least sinle Task';
     return;
   }
-  const cardData = readElements();
 
-  const dynamicCardElement = createCard(cardData);
-  const mainPrimaryDiv = document.querySelector('#primary');
-  mainPrimaryDiv.appendChild(dynamicCardElement);
-  saveData(cardData).then(() => {
-    $('#primary').children().remove();
-    loadAllCards();
-  }).catch(() => {
+  store.dispatch({
+    type: 'SAVE-LIST', title: currentCardTitle,
   });
+  // $( "#primary" ).empty();
+  // const cardData = readElements();
+
+  // const dynamicCardElement = createCard(cardData);
+  // const mainPrimaryDiv = document.querySelector('#primary');
+  // mainPrimaryDiv.appendChild(dynamicCardElement);
+  // saveData(cardData).then(() => {
+  //   $('#primary').children().remove();
+  //   loadAllCards();
+  // }).catch(() => {
+  // });
   $('#tasklist').modal('hide');
 }
 
-$(() => {
-  loadAllCards();
-
-  $('#addtask').button().on('click', () => {
-    document.querySelector('#dilogULItems').appendChild(createLiElement());
+function render() {
+  $('#dilogULItems').empty();
+  store.getState().tasksList.forEach((liElement) => {
+    document.querySelector('#dilogULItems').appendChild(createLiElement(liElement));
     $('.selector').sortable({
       items: '> li',
       update() {
@@ -191,6 +197,61 @@ $(() => {
     }).disableSelection();
     $('.selector').sortable('option', 'items');
     $('.selector').sortable('option', 'items', '> li');
+  });
+  $('#primary').empty();
+  store.getState().cardTaskList.forEach((cardData) => {
+    // const cardData = readElements();
+
+    const dynamicCardElement = createCard(cardData);
+    const mainPrimaryDiv = document.querySelector('#primary');
+    mainPrimaryDiv.appendChild(dynamicCardElement);
+    $('.selectormain').sortable({
+      items: '> li',
+      update() {
+        // readCardData($(this));
+      },
+    }).disableSelection();
+    $('.selectormain').sortable('option', 'items');
+    $('.selectormain').sortable('option', 'items', '> li');
+    $('#primary').sortable({
+      items: '> div',
+      stop() {
+      },
+      update() {
+        // readMainElements();
+      },
+
+    }).disableSelection();
+    $('#primary').sortable('option', 'items');
+    $('#primary').sortable('option', 'items', '> div');
+    saveData(cardData).then(() => {
+      // $('#primary').children().remove();
+      // loadAllCards();
+    }).catch(() => {
+    });
+  });
+}
+// render();
+store.subscribe(render);
+
+$(() => {
+  let allCardTaskList = [];
+  cardsData().then((cardsDataFromDB) => {
+    console.log(`====================${JSON.stringify(cardsDataFromDB)}`);
+    allCardTaskList = cardsDataFromDB;
+    store.dispatch({
+      type: 'LOAD-LIST', cardTaskList: allCardTaskList,
+    });
+  });
+
+  // loadAllCards();
+
+  $('#addtask').button().on('click', () => {
+    store.dispatch({
+      type: 'ADD-TASK',
+      eachLineData: { taskStatus: false, taskName: $('#taskDetail').get(0).value },
+    });
+    $('#taskDetail').get(0).value = '';
   });
 
   $('#taskDetail').keypress((event) => {
@@ -205,7 +266,11 @@ $(() => {
         $('#taskDetailmsg')[0].innerHTML = 'Please enter Task name';
         return;
       }
-      $('#dilogULItems')[0].appendChild(createLiElement());
+      store.dispatch({
+        type: 'ADD-TASK',
+        eachLineData: { taskStatus: false, taskName: $('#taskDetail').get(0).value },
+      });
+      $('#taskDetail').get(0).value = '';
     }
   });
 
@@ -222,6 +287,9 @@ $(() => {
   });
 
   $(document).on('click', 'button#modalclose', () => {
+    store.dispatch({
+      type: 'CLEAR-LIST',
+    });
     $('.selector').empty();
     $('#taskDetail')[0].value = '';
     $('#cardtitle')[0].value = '';

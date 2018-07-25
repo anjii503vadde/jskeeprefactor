@@ -1,3 +1,5 @@
+import store from './state';
+
 const currentTask = {};
 const currentTaskList = [];
 
@@ -11,17 +13,52 @@ function createCheckBox() {
   return createHTMLElement(dynamicCheckBox);
 }
 
-function createInputText() {
+function createCheckBoxForModal(taskStatus) {
+  const dynamicCheckBox = '<input type="checkbox" style="width:10%"></input>';
+  const dynamicCheckBoxElement = createHTMLElement(dynamicCheckBox);
+  dynamicCheckBoxElement.checked = taskStatus;
+  return dynamicCheckBoxElement;
+}
+
+// function createInputText() {
+//   const dynamicInputText = '<input type="text" style="width:65%"></input>';
+//   const inputElement = createHTMLElement(dynamicInputText);
+//   inputElement.value = $('#taskDetail').get(0).value;
+//   currentTask.taskName = $('#taskDetail').get(0).value;
+//   currentTaskList.push(currentTask);
+//   $('#taskDetail').get(0).value = '';
+//   return inputElement;
+// }
+function createInputTextForModa(taskName) {
   const dynamicInputText = '<input type="text" style="width:65%"></input>';
   const inputElement = createHTMLElement(dynamicInputText);
-  inputElement.value = $('#taskDetail').get(0).value;
-  currentTask.taskName = $('#taskDetail').get(0).value;
+  inputElement.value = taskName;
+  currentTask.taskName = taskName;
   currentTaskList.push(currentTask);
-  $('#taskDetail').get(0).value = '';
+
   return inputElement;
 }
 
 function removeTaskFromList() {
+  let selectedId;
+  const itemsDilogDiv = $('#itemsDilog')[0];
+  if (itemsDilogDiv.hasChildNodes) {
+    const ulElements = itemsDilogDiv.childNodes;
+    ulElements.forEach((ulElement) => {
+      if (ulElement.hasChildNodes) {
+        const liElements = ulElement.childNodes;
+        liElements.forEach((liElement) => {
+          if (liElement.hasChildNodes) {
+            const dataItems = liElement.childNodes;
+            selectedId = Number(dataItems[3].value);
+          }
+        });
+      }
+    });
+  }
+  store.dispatch({
+    type: 'REMOVE-TASK', selectedId,
+  });
   $(this).parent().remove();
 }
 
@@ -47,12 +84,19 @@ function createOutputText(txtValue) {
 }
 const dynamicLiElement = '<li class="list-group-item d-flex justify-content-between align-items-center" style="padding:display"></li>';
 
+function createInputTextHiddenForModal(id) {
+  const dynamicInputText = '<input type="hidden" id="hiddenId" name="hiddenId" style="width:65%"></input>';
+  const inputElement = createHTMLElement(dynamicInputText);
+  inputElement.value = id;
+  return inputElement;
+}
 
-function createLiElement() {
+function createLiElement(liElementData) {
   const liElement = createHTMLElement(dynamicLiElement);
-  liElement.appendChild(createCheckBox());
-  liElement.appendChild(createInputText());
+  liElement.appendChild(createCheckBoxForModal(liElementData.taskStatus));
+  liElement.appendChild(createInputTextForModa(liElementData.taskName));
   liElement.appendChild(createDeleteButton());
+  liElement.appendChild(createInputTextHiddenForModal(liElementData.id));
   return liElement;
 }
 
@@ -84,6 +128,7 @@ function createInputTextHidden(id) {
   inputElement.value = id;
   return inputElement;
 }
+
 
 function createCard(inputList) {
   const dynamicCard = '<div class="card dragzones col-md-3" style="margin: 5px 5px 5px 5px"></div>';
