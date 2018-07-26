@@ -1,3 +1,5 @@
+import store from './state';
+
 function callAjax(callType, callURL, callContentType, callData) {
   return new Promise(((resolve, reject) => {
     $.ajax({
@@ -14,7 +16,11 @@ function callAjax(callType, callURL, callContentType, callData) {
 }
 
 function cardsData() {
-  return callAjax('GET', 'http://localhost:3000/lists', 'application/json');
+  return callAjax('GET', 'http://localhost:3000/lists', 'application/json').then((cardsDataFromDB) => {
+    store.dispatch({
+      type: 'LOAD-LIST', cardTaskList: cardsDataFromDB,
+    });
+  });
 }
 
 function saveData(cardData) {

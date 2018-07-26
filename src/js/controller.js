@@ -1,8 +1,8 @@
 import {
-  cardsData, saveData, updateCardData, deleteCurrentCard,
+  cardsData, updateCardData, deleteCurrentCard,
 } from './service';
 import {
-  createCard, createLiElement, currentTaskList,
+  currentTaskList,
 } from './view';
 
 import store from './state';
@@ -186,63 +186,8 @@ function addItemsToCard() {
   $('#tasklist').modal('hide');
 }
 
-function render() {
-  $('#dilogULItems').empty();
-  store.getState().tasksList.forEach((liElement) => {
-    document.querySelector('#dilogULItems').appendChild(createLiElement(liElement));
-    $('.selector').sortable({
-      items: '> li',
-      update() {
-      },
-    }).disableSelection();
-    $('.selector').sortable('option', 'items');
-    $('.selector').sortable('option', 'items', '> li');
-  });
-  $('#primary').empty();
-  store.getState().cardTaskList.forEach((cardData) => {
-    // const cardData = readElements();
-
-    const dynamicCardElement = createCard(cardData);
-    const mainPrimaryDiv = document.querySelector('#primary');
-    mainPrimaryDiv.appendChild(dynamicCardElement);
-    $('.selectormain').sortable({
-      items: '> li',
-      update() {
-        // readCardData($(this));
-      },
-    }).disableSelection();
-    $('.selectormain').sortable('option', 'items');
-    $('.selectormain').sortable('option', 'items', '> li');
-    $('#primary').sortable({
-      items: '> div',
-      stop() {
-      },
-      update() {
-        // readMainElements();
-      },
-
-    }).disableSelection();
-    $('#primary').sortable('option', 'items');
-    $('#primary').sortable('option', 'items', '> div');
-    saveData(cardData).then(() => {
-      // $('#primary').children().remove();
-      // loadAllCards();
-    }).catch(() => {
-    });
-  });
-}
-// render();
-store.subscribe(render);
-
 $(() => {
-  let allCardTaskList = [];
-  cardsData().then((cardsDataFromDB) => {
-    console.log(`====================${JSON.stringify(cardsDataFromDB)}`);
-    allCardTaskList = cardsDataFromDB;
-    store.dispatch({
-      type: 'LOAD-LIST', cardTaskList: allCardTaskList,
-    });
-  });
+  cardsData();
 
   // loadAllCards();
 
